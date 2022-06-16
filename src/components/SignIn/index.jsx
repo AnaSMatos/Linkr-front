@@ -1,13 +1,25 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useContext } from 'react';
 import styled from 'styled-components';
+import RenderButton from "./../Layout/RenderButton.jsx";
+import { UserDataContexts } from "../../hooks/AuthContext.js";
 
 export default function Register() {
-    const signUp = [];
-    const { name, email, password, image } = signUp;
+    const { infosLogin, setInfosLogin, signInSuccess, postSignIn } = useContext(UserDataContexts);
+    const { email, password } = infosLogin;
     const [ disabled, setDisabled ] = useState(false);
 
     const navigate = useNavigate();
+
+    function OnSubmit(e) {
+        setDisabled(true);
+        postSignIn(infosLogin, e);
+        if(signInSuccess === true){
+            navigate('/timeline');
+        } else {
+            setDisabled(false);
+        }
+    }
 
     return (
         <Container>
@@ -15,13 +27,14 @@ export default function Register() {
                 <h1>linkr</h1>
                 <h2>save, share and discover the best links on the web</h2>
             </Header>
-            <Form>
+            <Form onSubmit={OnSubmit} >
                 <Input
                     disabled = {disabled}
                     type = "email"
                     value = {email}
                     placeholder = "e-mail"
                     required
+                    onChange={(e) => setInfosLogin({...infosLogin, email: e.target.value})}
                 />
                 <Input
                     disabled = {disabled}
@@ -30,9 +43,10 @@ export default function Register() {
                     placeholder = "password"
                     autocomplete="on"
                     required
+                    onChange={(e) => setInfosLogin({...infosLogin, password: e.target.value})}
                 />
                 <Button disabled={disabled} type="submit">
-                    Sign In
+                    <RenderButton state={disabled} text="Sign In"/>
                 </Button>
                 <Link to = "/sign-up">
                     <GoTo>First time? Create an account!</GoTo>
