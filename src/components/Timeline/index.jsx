@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Header from "../Header";
 import PostsPage from "../Posts";
 import MainContainer from "../Layout/MainContainer";
+import CreatePost from "../CreatePost";
 import { getContext } from "../../hooks/UserContext";
 
 export default function Timeline() {
@@ -31,24 +32,31 @@ export default function Timeline() {
   }, []);
 
   return (
-    <>
-      <Header />
       <MainContainer>
-        <h2>timeline</h2>
+        <Header />
         <Page>
-          <PostsPage posts={posts} />
-          <Hashtags className="hashtags">
-            <h2>trending</h2>
-          </Hashtags>
+          <Title>
+            <h2>timeline</h2>
+          </Title>
+          <Content>
+            <Posts>
+              <CreatePost image={posts.image}/>
+              <PostsPage posts={posts} />
+            </Posts>
+            <Hashtags className="hashtags">
+              <h2>trending</h2>
+            </Hashtags>
+          </Content>
         </Page>
       </MainContainer>
-    </>
   );
 }
 
 const Page = styled.section`
+  width: 70%;
   margin: auto;
   display: flex;
+  flex-direction: column;
   @media (min-width: 835px) {
     .hashtags {
       display: flex;
@@ -60,6 +68,29 @@ const Page = styled.section`
     }
   }
 `;
+
+const Title = styled.div`
+  padding: 45px 0;
+  h2{
+    font-family: 'Oswald';
+    font-weight: 700;
+    font-size: 43px;
+    color: #FFFFFF;
+  }
+`;
+
+const Posts = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  margin-right: 20px;
+`
+
+const Content = styled.div`
+  display: flex;
+`;
+
+
 const Hashtags = styled.aside`
   position: sticky;
   width: 301px;
