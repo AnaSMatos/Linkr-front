@@ -1,10 +1,12 @@
 import styled from "styled-components";
+import { getContext } from "../../hooks/UserContext";
 
 export default function Header() {
+  const {userImage} = getContext().contextData;
   return (
     <HeaderContainer>
         <h1>linkr</h1>
-        <div className="image"></div>
+        <img src={userImage} alt="" />
     </HeaderContainer>
   );
 }
@@ -23,13 +25,13 @@ const HeaderContainer = styled.header`
   justify-content: space-between;
   padding: 0 14px 0 17px;
 
-  &> .image{
+  &> img{
       width: 44px;
-      min-height: 44px;
+      height: 44px;
       border-radius:100%;
-      background-color: white;
   }
   &>h1{
+    font-family: "Passion One";
     font-weight: 700;
     font-size: 45px;
     line-height: 50px;
