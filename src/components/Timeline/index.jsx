@@ -25,13 +25,12 @@ export default function Timeline() {
       });
   }, []);
   return (
-    <>
-      <Header />
       <MainContainer>
+        <Header />
         <h2>timeline</h2>
         {typeof posts === "string" ? 
           <h2>{posts}</h2>
-         : 
+        : 
           <>
             {posts.map((post,index) => {
               const {message} = post;
@@ -40,6 +39,5 @@ export default function Timeline() {
           </>
         }
       </MainContainer>
-    </>
   );
 }

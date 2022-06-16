@@ -7,12 +7,8 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.3.0",
-<<<<<<< HEAD
-    "react-scripts": "^4.0.3"
-=======
     "react-scripts": "^4.0.3",
     "styled-components": "^5.3.5"
->>>>>>> 12ae686fb9e83814fbdbe3a1e751c7ea854cc7b2
   },
   "scripts": {
     "start": "react-scripts start",
