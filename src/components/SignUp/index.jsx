@@ -1,13 +1,27 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useContext } from 'react';
 import styled from 'styled-components';
+import RenderButton from "./../Layout/RenderButton.jsx";
+import { UserDataContexts } from "../../hooks/AuthContext.js";
 
-export default function Register() {
-    const signUp = [];
+export default function SignUp() {
+    const { signUp, setSignUp, signUpSuccess, postSignUp } = useContext(UserDataContexts);
     const { name, email, password, image } = signUp;
     const [ disabled, setDisabled ] = useState(false);
 
     const navigate = useNavigate();
+
+    function OnSubmit(e) {
+        setDisabled(true);
+        postSignUp(signUp, e);
+        if(signUpSuccess === true){
+            navigate('/');
+            console.log("SUCCESS")
+        } else {
+            setDisabled(false);
+            console.log("NOT POSSIBLE SIGNUP")
+        }
+    }
 
     return (
         <Container>
@@ -15,13 +29,15 @@ export default function Register() {
                 <h1>linkr</h1>
                 <h2>save, share and discover the best links on the web</h2>
             </Header>
-            <Form>
+            <Form onSubmit = {OnSubmit}>
                 <Input
                     disabled = {disabled}
                     type = "email"
                     value = {email}
                     placeholder = "e-mail"
+                    autocomplete="on"
                     required
+                    onChange = {(e) => setSignUp({...signUp, email: e.target.value})}
                 />
                 <Input
                     disabled = {disabled}
@@ -30,25 +46,26 @@ export default function Register() {
                     placeholder = "password"
                     autocomplete="on"
                     required
+                    onChange = {(e) => setSignUp({...signUp, password: e.target.value})}
                 />
                 <Input
                     disabled = {disabled}
                     type = "text"
                     value = {name}
-                    title = "A senha deve conter no mínimo 3 caracteres"
                     placeholder = "username"
                     required
+                    onChange = {(e) => setSignUp({...signUp, name: e.target.value})}
                 />
                 <Input
                     disabled = {disabled}
                     type = "text"
                     value = {image}
-                    title = "Digite senhas iguais"
                     placeholder = "picture url"
                     required
+                    onChange = {(e) => setSignUp({...signUp, image: e.target.value})}
                 />
                 <Button disabled={disabled} type="submit">
-                    Sign Up
+                        <RenderButton state={disabled} text="Sign Up"/>
                 </Button>
                 <Link to = "/">
                     <GoTo>Switch back to log in</GoTo>
