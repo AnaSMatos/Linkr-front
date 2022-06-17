@@ -26,16 +26,16 @@ const HeaderContainer = styled.header`
   padding: 0 14px 0 17px;
 
   &> img{
-      width: 44px;
-      height: 44px;
+      width: var(--header-size-image);
+      height: var(--header-size-image);
       border-radius:100%;
   }
   &>h1{
-    font-family: "Passion One";
-    font-weight: 700;
-    font-size: 45px;
+    font-family: var(--font-family-h1);
+    font-weight: var(--font-bold);
+    font-size: var(--header-font-size);
     line-height: 50px;
     letter-spacing: 0.05em;
-    color: #FFFFFF;
+    color: var(--color-white);
   }
 `;

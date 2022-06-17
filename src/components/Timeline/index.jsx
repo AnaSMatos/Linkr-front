@@ -16,7 +16,7 @@ export default function Timeline() {
       "An error occured while trying to fetch the posts, please refresh the page",
   };
   const [posts, setPosts] = useState(statusMessages.loadingPosts);
-  const { url, config } = getContext().contextData;
+  const { url, config, userImage } = getContext().contextData;
 
   useEffect(() => {
     const promisse = axios.get(`${url}/posts`, config);
@@ -40,7 +40,7 @@ export default function Timeline() {
           </Title>
           <Content>
             <Posts>
-              <CreatePost image={posts.image}/>
+              <CreatePost image={userImage}/>
               <PostsPage posts={posts} />
             </Posts>
             <Hashtags className="hashtags">
@@ -53,7 +53,7 @@ export default function Timeline() {
 }
 
 const Page = styled.section`
-  width: 70%;
+  width: var(--page-width);
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -62,28 +62,24 @@ const Page = styled.section`
       display: flex;
     }
   }
-  @media (min-width: 611px) {
-    .post-container{
-      border-radius: 16px;
-    }
-  }
 `;
 
 const Title = styled.div`
-  padding: 45px 0;
+  padding: var(--tittle-padding);
   h2{
-    font-family: 'Oswald';
-    font-weight: 700;
-    font-size: 43px;
-    color: #FFFFFF;
+    font-family: var(--font-family-h2);
+    font-weight: var(--font-bold);
+    font-size: var(--tittle-font-size);
+    color: var(--color-white);
   }
 `;
 
 const Posts = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70%;
-  margin-right: 20px;
+  width: var(--post-width);
+  margin-right: var(--post-margin);
+
 `
 
 const Content = styled.div`
@@ -101,7 +97,8 @@ const Hashtags = styled.aside`
   padding: 9px 16px 30px 16px;
   &>h2{
     font-weight: var(--font-bold);
-    font-size: var(--font-size-h2);
+    font-size: 40px;
+    font-family: var(--font-family-h2);
     color: var(--color-white);
   }
 `;
