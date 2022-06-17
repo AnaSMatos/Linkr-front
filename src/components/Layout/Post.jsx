@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { BiHeart } from "react-icons/bi";
+import HashtagHook from "../../hooks/HashtagHook.js";
 
 export default function Post(props) {
-  const { message, image, likes, username, postData } = props;
+  const { message, image, likes, username, postData, index } = props;
   const { postDescription, postImage, postTitle, postUrl } = postData;
   return (
-    <PostContainer className="post-container">
+    <PostContainer>
       <LeftInfons>
         <img src={image} alt="userPhoto" />
         <BiHeart />
@@ -15,15 +16,13 @@ export default function Post(props) {
       </LeftInfons>
       <RightInfons>
         <h3>{username}</h3>
-        <p>{message}</p>
+        <p><HashtagHook text = {message} index = {index} /></p>
         <a href={postUrl} target="_blank" rel="noreferrer">
           <PostInfos>
             <div>
-              <h3>{postTitle}</h3>
-              <p>{postDescription}</p>
-              <p>
-                <small>{postUrl}</small>
-              </p>
+              <p>{postTitle}</p>
+              <p><small>{postDescription}</small></p>
+              <p><small>{postUrl}</small></p>
             </div>
             <img src={postImage} alt="postImage" />
           </PostInfos>
@@ -35,38 +34,37 @@ export default function Post(props) {
 
 const PostContainer = styled.article`
   width: 100%;
-  max-width: var(--post-max-width);
   height: 100%;
+  max-width: var(--post-max-width);
   background: var(--color-black);
   margin-bottom: var(--post--margin--bottom);
   padding: var(--padding-post-container);
-  font-size: var(--font-size-normal);
-  line-height: 20px;
-  color: var(--color-grey);
+  font-size: var(--font-size-big);
+  color: var(--color-white);
+  border-radius: var(--post-border-radius);
   display: flex;
   p {
-    margin: 7px 0 14px 0;
+    margin: var(--margin-message);
+    color: var(--color-dark-grey);
   }
   small {
     font-size: var(--font-size-small);
-    margin: 12px 0 0 0;
+    color: var(--color-white);
   }
   strong {
     font-weight: var(--font-bold);
-  }
-  h3 {
-    font-size: 17px;
-  }
-  small,
-  strong,
-  h3 {
     color: var(--color-white);
   }
+  h3 {
+    font-size: var(--font-size-name);
+    color: var(--color-white);
+    line-height: 20px;
+  }
+  
   img {
-    width: 40px;
-    height: 40px;
+    width: var(--post-perfil-image-size);
+    height: var(--post-perfil-image-size);
     border-radius: 100%;
-    margin-bottom: 17px;
   }
 `;
 
@@ -75,20 +73,22 @@ const LeftInfons = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100%;
-  width: 69px;
+  width: var(--left-infos-width);
   svg {
-    font-size: 22px;
+    font-size: var(--post-svg-size);
+    margin: var(--post-svg-margin);
   }
 `;
 const RightInfons = styled.div`
+  overflow: auto;
   width: 100%;
-  min-height: 207px;
+  min-height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 `;
 const PostInfos = styled.article`
-  border: var(--post-border);
+  border: 1px solid #4d4d4d;
   border-radius: 11px;
   width: 100%;
   height: 100%;
@@ -96,7 +96,11 @@ const PostInfos = styled.article`
   justify-content: space-between;
   p {
     margin: 5px 0 5px 0;
-    color: var(--color-light-grey);
+    font-size: var(--font-size-normal);
+    color: var(--color-grey);
+  }
+  small{
+    color: var(--color-dark-grey);
   }
   img {
     height: 100%;
@@ -107,9 +111,8 @@ const PostInfos = styled.article`
   div {
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    padding: 7px;
-    margin-left: 4px;
+    padding: var(--rigth-infos-padding);
+    margin-left: var(--rigth-infos-margin);
     display: flex;
     flex-direction: column;
     justify-content: space-between;

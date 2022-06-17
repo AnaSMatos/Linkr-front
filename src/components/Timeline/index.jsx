@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Header from "../Header";
 import PostsPage from "../Posts";
 import MainContainer from "../Layout/MainContainer";
+import CreatePost from "../CreatePost";
 import { getContext } from "../../hooks/UserContext";
 
 export default function Timeline() {
@@ -15,7 +16,7 @@ export default function Timeline() {
       "An error occured while trying to fetch the posts, please refresh the page",
   };
   const [posts, setPosts] = useState(statusMessages.loadingPosts);
-  const { url, config } = getContext().contextData;
+  const { url, config, userImage } = getContext().contextData;
 
   useEffect(() => {
     const promisse = axios.get(`${url}/posts`, config);
@@ -31,35 +32,61 @@ export default function Timeline() {
   }, []);
 
   return (
-    <>
-      <Header />
       <MainContainer>
-        <h2>timeline</h2>
+        <Header />
         <Page>
-          <PostsPage posts={posts} />
-          <Hashtags className="hashtags">
-            <h2>trending</h2>
-          </Hashtags>
+          <Title>
+            <h2>timeline</h2>
+          </Title>
+          <Content>
+            <Posts>
+              <CreatePost image={userImage}/>
+              <PostsPage posts={posts} />
+            </Posts>
+            <Hashtags className="hashtags">
+              <h2>trending</h2>
+            </Hashtags>
+          </Content>
         </Page>
       </MainContainer>
-    </>
   );
 }
 
 const Page = styled.section`
+  width: var(--page-width);
   margin: auto;
   display: flex;
+  flex-direction: column;
   @media (min-width: 835px) {
     .hashtags {
       display: flex;
     }
   }
-  @media (min-width: 611px) {
-    .post-container{
-      border-radius: 16px;
-    }
+`;
+
+const Title = styled.div`
+  padding: var(--tittle-padding);
+  h2{
+    font-family: var(--font-family-h2);
+    font-weight: var(--font-bold);
+    font-size: var(--tittle-font-size);
+    color: var(--color-white);
   }
 `;
+
+const Posts = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: var(--post-width);
+  margin-right: var(--post-margin);
+
+`
+
+const Content = styled.div`
+  display: flex;
+`;
+
+
 const Hashtags = styled.aside`
   position: sticky;
   width: 301px;
@@ -70,7 +97,8 @@ const Hashtags = styled.aside`
   padding: 9px 16px 30px 16px;
   &>h2{
     font-weight: var(--font-bold);
-    font-size: var(--font-size-h2);
+    font-size: 40px;
+    font-family: var(--font-family-h2);
     color: var(--color-white);
   }
 `;

@@ -14,6 +14,7 @@ export default function PostsPage(props) {
             return (
               <Post
                 key={index}
+                index={index}
                 message={message}
                 image={image}
                 likes={likes}
