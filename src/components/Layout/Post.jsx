@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { BiHeart } from "react-icons/bi";
+import HashtagHook from "../../hooks/HashtagHook.js";
 
 export default function Post(props) {
-  const { message, image, likes, username, postData } = props;
+  const { message, image, likes, username, postData, index } = props;
   const { postDescription, postImage, postTitle, postUrl } = postData;
   return (
     <PostContainer>
@@ -15,7 +16,7 @@ export default function Post(props) {
       </LeftInfons>
       <RightInfons>
         <h3>{username}</h3>
-        <p>{message}</p>
+        <p><HashtagHook text = {message} index = {index} /></p>
         <a href={postUrl} target="_blank" rel="noreferrer">
           <PostInfos>
             <div>
