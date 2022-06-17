@@ -1,14 +1,7 @@
-import Loading from "./Loading.jsx"
+import Loading from "./Loading.jsx";
 
 export default function RenderButton(props) {
-    const { state, text } = props;
-    if(state === true){
-        return (
-            <Loading />
-        )
-    }if(state === false){
-        return (
-            <p>{text}</p>
-        )
-    }
+  const { state, text } = props;
+
+  return state ? <Loading /> : <p>{text}</p>;
 }
