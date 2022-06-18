@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import { getContext } from "../../hooks/UserContext";
 
-import { deleteItem } from "./../../utils/localStorage.js";
+import { getItem, deleteItem } from "./../../utils/localStorage.js";
 
 import Menu from "./../Menu";
 import MenuItem from "./../MenuItem";
@@ -11,10 +12,33 @@ import MenuItem from "./../MenuItem";
 export default function Header() {
   const { userImage } = getContext().contextData;
   const navigate = useNavigate();
+  const userInfo = getItem("user");
 
-  const handleLogout = () => {
-    deleteItem("user");
-    navigate("/");
+  const handleLogout = async () => {
+    if (userInfo) {
+      const { sessionId, userId, token } = userInfo;
+
+      try {
+        await axios.post(
+          `${process.env.REACT_APP_URL}/logout`,
+          {
+            sessionId,
+            userId,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        deleteItem("user");
+        navigate("/");
+      } catch (error) {
+        console.log(error);
+        window.alert("Ocorreu um erro ao tentar fazer logout, tente novamente");
+      }
+    }
   };
 
   return (
