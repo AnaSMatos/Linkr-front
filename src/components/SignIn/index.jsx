@@ -28,7 +28,7 @@ export default function Register() {
     setDisabled(true);
     postSignIn(e, infosLogin)
       .then((answer) => {
-        persistUser(contextData,setContext,answer.data.token);
+        persistUser(contextData,setContext,answer.data);
         setItem("user", { ...answer.data });
         navigate("/timeline");
         setUserInfos(answer.data);
