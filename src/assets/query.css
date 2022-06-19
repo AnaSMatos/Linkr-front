@@ -27,5 +27,6 @@
   * {
     --post-width: 70%;
     --post-margin: 20px;
+    --hashtags-display:flex;
   }
 }
