@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 
@@ -7,6 +8,7 @@ import PostsPage from "../Posts";
 import MainContainer from "../Layout/MainContainer";
 import CreatePost from "../CreatePost";
 import { getContext } from "../../hooks/UserContext";
+import Hashtags from "../Hashtags/index.jsx";
 
 export default function Timeline() {
   const statusMessages = {
@@ -16,17 +18,20 @@ export default function Timeline() {
       "An error occured while trying to fetch the posts, please refresh the page",
   };
   const [posts, setPosts] = useState(statusMessages.loading);
-  const [hashtags, setHashtags] = useState(statusMessages.loading);
+  const [hashtags, setHashtags] = useState([]);
   const { url, config, userImage } = getContext().contextData;
+  const { hashtag } = useParams();
+  const queryHashtag = hashtag?`?hashtag=${hashtag}`:"";
 
   useEffect(() => {
-    if(config){
+    if (config) {
       getPosts();
+      getHashtags();
     }
   }, [getContext().contextData]);
 
   function getPosts() {
-    const promisse = axios.get(`${url}/posts`, config);
+    const promisse = axios.get(`${url}/posts${queryHashtag}`, config);
     promisse
       .then((response) => {
         const data = response.data;
@@ -39,7 +44,7 @@ export default function Timeline() {
       });
   }
   function getHashtags() {
-    const promisse = axios.get(`${url}/hashtags`, config);
+    const promisse = axios.get(`${url}/hashtag`, config);
     promisse
       .then((response) => {
         setHashtags(response.data);
@@ -50,23 +55,21 @@ export default function Timeline() {
       });
   }
   return (
-      <MainContainer>
-        <Header />
-        <Page>
-          <Title>
-            <h2>timeline</h2>
-          </Title>
-          <Content>
-            <Posts>
-              <CreatePost posts={posts} setPosts={setPosts}/>
-              <PostsPage posts={posts} />
-            </Posts>
-            <Hashtags className="hashtags">
-              <h2>trending</h2>
-            </Hashtags>
-          </Content>
-        </Page>
-      </MainContainer>
+    <MainContainer>
+      <Header />
+      <Page>
+        <Title>
+          <h2>{hashtag ? `# ${hashtag}`: "timeline"}</h2>
+        </Title>
+        <Content>
+          <Posts>
+            {hashtag ? <></> : <CreatePost posts={posts} setPosts={setPosts} />}
+            <PostsPage posts={posts} />
+          </Posts>
+          <Hashtags hashtags={hashtags} />
+        </Content>
+      </Page>
+    </MainContainer>
   );
 }
 
@@ -96,19 +99,4 @@ const Posts = styled.div`
 
 const Content = styled.div`
   display: flex;
-`;
-
-const Hashtags = styled.aside`
-  width: 301px;
-  height: 406px;
-  background: var(--color-black);
-  border-radius: 16px;
-  display: var(--hashtags-display);
-  padding: 9px 16px 30px 16px;
-  & > h2 {
-    font-weight: var(--font-bold);
-    font-size: 40px;
-    font-family: var(--font-family-h2);
-    color: var(--color-white);
-  }
 `;
