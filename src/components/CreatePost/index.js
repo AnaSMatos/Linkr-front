@@ -1,28 +1,65 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 
-export default function CreatePost({image}) {
-    
-    const [post, setPost] = useState({});
+export default function CreatePost(props) {
+
+    const {posts, setPosts} = props
     const [url, setUrl] = useState('');
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
+
+
 
     function handleSubmit(e) {
         e.preventDefault();
         setLoading(true);
         if (message === ""){
             setMessage(null);
+        }else{
+            const hashtags = handleHashtags(message);
+            console.log(hashtags);
         }
 
-        //a promisse vem aqui
+        const body = {
+            message,
+            url
+        }
+
+        const config = {  
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
+            }
+        }
+
+        const promise = axios.post(`${process.env.REACT_APP_URL}/posts`, body, config);
+        promise.then(res => {
+            setLoading(false);
+            setUrl('');
+            setMessage('');
+            const promise = axios.get(`${process.env.REACT_APP_URL}/posts`, config);
+            promise
+            .then(res => setPosts(res.data))
+            .catch(err => console.log(err))
+        })
+        promise.catch(err => {
+            alert("Houve um erro ao publicar seu link")
+            setLoading(false);
+        })
     }
+
+    function handleHashtags(text){
+        const arrHashtags = text.split(' ').filter(v=> v.startsWith('#'))
+        return arrHashtags.map(v=>{
+            return v.replace('#','')
+        })
+    }
+
 
     return (
         <Create>
             <User>
-                <img src={image} alt="ph" />
+                <img src="" alt="ph" />
             </User>
             <Publish>
                 <h3>What are you going to share today?</h3>
@@ -34,15 +71,16 @@ export default function CreatePost({image}) {
                         placeholder="http://..."
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
+                        disabled={loading}
                         />
                     <textarea 
                         className="text" 
                         placeholder="Awesome article about #javascript"
                         value={message}
-                        onChange={(e) => {setMessage(e.target.value)
-                        console.log(message)}}
+                        onChange={(e) => setMessage(e.target.value)}
+                        disabled={loading}
                         ></textarea>
-                    <button type="submit">Publish</button>
+                    <button type="submit" disabled={loading}>{loading ? "Publicando..." : "Publicar"}</button>
                 </Form>
             </Publish>
         </Create>

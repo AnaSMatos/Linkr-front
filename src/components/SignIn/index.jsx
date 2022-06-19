@@ -8,11 +8,15 @@ import { UserDataContexts } from "../../hooks/AuthContext.js";
 
 import { setItem, getItem } from "./../../utils/localStorage.js";
 
+import { getContext } from "../../hooks/UserContext.js";
+import persistUser from "../../hooks/persistUser.js";
+
 export default function Register() {
   const { infosLogin, setInfosLogin, setUserInfos, postSignIn } =
     useContext(UserDataContexts);
   const { email, password } = infosLogin;
   const [disabled, setDisabled] = useState(false);
+  const {contextData,setContext}=getContext();
 
   const navigate = useNavigate();
 
@@ -24,6 +28,7 @@ export default function Register() {
     setDisabled(true);
     postSignIn(e, infosLogin)
       .then((answer) => {
+        persistUser(contextData,setContext,answer.data);
         setItem("user", { ...answer.data });
         navigate("/timeline");
         setUserInfos(answer.data);
