@@ -4,26 +4,25 @@ import axios from "axios";
 
 export default function CreatePost(props) {
 
-    const {posts, setPosts} = props
+    const {setPosts} = props
     const [url, setUrl] = useState('');
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
 
-
-
     function handleSubmit(e) {
         e.preventDefault();
         setLoading(true);
+        let hashtags = []
         if (message === ""){
             setMessage(null);
         }else{
-            const hashtags = handleHashtags(message);
-            console.log(hashtags);
+            hashtags = handleHashtags(message);
         }
 
         const body = {
             message,
-            url
+            url,
+            hashtags
         }
 
         const config = {  
