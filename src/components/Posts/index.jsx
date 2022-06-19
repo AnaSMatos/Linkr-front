@@ -10,9 +10,10 @@ export default function PostsPage(props) {
       ) : (
         <>
           {posts.map((post, index) => {
-            const { message, image, likes, username, postData } = post;
+            const { id, message, image, likes, username, postData } = post;
             return (
               <Post
+                id={id}
                 key={index}
                 index={index}
                 message={message}
@@ -30,11 +31,11 @@ export default function PostsPage(props) {
 }
 
 const Posts = styled.div`
-display: flex;
-flex-direction: column;
-width: 100%;
-height: 100%;
-  &> p{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  & > p {
     font-weight: var(--font-bold);
     font-size: 33px;
     color: var(--color-white);

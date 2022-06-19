@@ -1,28 +1,34 @@
 import styled from "styled-components";
-import { BiHeart } from "react-icons/bi";
+
 import HashtagHook from "../../hooks/HashtagHook.js";
 
+import Like from "./../Like";
+
 export default function Post(props) {
-  const { message, image, likes, username, postData, index } = props;
+  const { id, message, image, username, postData, index } = props;
   const { postDescription, postImage, postTitle, postUrl } = postData;
+
   return (
     <PostContainer>
       <LeftInfons>
         <img src={image} alt="userPhoto" />
-        <BiHeart />
-        <p>
-          <small>{likes} likes</small>
-        </p>
+        <Like id={id} />
       </LeftInfons>
       <RightInfons>
         <h3>{username}</h3>
-        <p><HashtagHook text = {message} index = {index} /></p>
+        <p>
+          <HashtagHook text={message} index={index} />
+        </p>
         <a href={postUrl} target="_blank" rel="noreferrer">
           <PostInfos>
             <div>
               <p>{postTitle}</p>
-              <p><small>{postDescription}</small></p>
-              <p><small>{postUrl}</small></p>
+              <p>
+                <small>{postDescription}</small>
+              </p>
+              <p>
+                <small>{postUrl}</small>
+              </p>
             </div>
             <img src={postImage} alt="postImage" />
           </PostInfos>
@@ -60,7 +66,7 @@ const PostContainer = styled.article`
     color: var(--color-white);
     line-height: 20px;
   }
-  
+
   img {
     width: var(--post-perfil-image-size);
     height: var(--post-perfil-image-size);
@@ -72,12 +78,9 @@ const LeftInfons = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: start;
   height: 100%;
   width: var(--left-infos-width);
-  svg {
-    font-size: var(--post-svg-size);
-    margin: var(--post-svg-margin);
-  }
 `;
 const RightInfons = styled.div`
   overflow: auto;
@@ -99,7 +102,7 @@ const PostInfos = styled.article`
     font-size: var(--font-size-normal);
     color: var(--color-grey);
   }
-  small{
+  small {
     color: var(--color-dark-grey);
   }
   img {
