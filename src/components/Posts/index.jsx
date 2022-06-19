@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Post from "../Layout/Post";
+import Post from "./Post";
 
 export default function PostsPage(props) {
   const { posts } = props;

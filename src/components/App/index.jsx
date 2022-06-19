@@ -18,7 +18,8 @@ function App() {
           <Routes>
             <Route path="/" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
-            <Route path="/timeline" element={<Timeline />} />          
+            <Route path="/timeline" element={<Timeline />} />
+            <Route path="/hashtag/:hashtag" element={<Timeline />} />
           </Routes>
         </BrowserRouter>
       </Provider>
