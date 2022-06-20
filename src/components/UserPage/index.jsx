@@ -18,7 +18,14 @@ export default function UserPage() {
         errorRequest:
         "An error occured while trying to fetch the posts, please refresh the page",
     };
+    const usersMessages = {
+        loading: "Loading",
+        emptArray: "There are no users with this id",
+        errorRequest:
+        "An error occured while trying to fetch the user, please refresh the page",
+    };
     const [posts, setPosts] = useState(statusMessages.loading);
+    const [user, setUser] = useState(usersMessages.loading);
     const [hashtags, setHashtags] = useState([]);
     const { url, config, userImage } = getContext().contextData;
     const { hashtag } = useParams();
@@ -26,13 +33,15 @@ export default function UserPage() {
 
     useEffect(() => {
         if (config) {
-        getPosts();
-        getHashtags();
+            getPosts();
+            getHashtags();
+            getUser();
         }
     }, [getContext().contextData]);
 
     function getPosts() {
-        const promisse = axios.get(`${url}/posts/1`, config);
+        console.log("Entrei em getPosts")
+        const promisse = axios.get(`${url}/posts/${id}`, config);
         promisse
         .then((response) => {
             const data = response.data;
@@ -55,16 +64,33 @@ export default function UserPage() {
             setHashtags(statusMessages.errorRequest);
         });
     }
+
+    function getUser() {
+        console.log("Entrei em getUser")
+        const promisse = axios.get(`${url}/user/${id}`, config);
+        promisse
+        .then((response) => {
+            const data = response.data;
+            if (data.length === 0) setUser(usersMessages.emptArray);
+            else setUser(data);
+        })
+        .catch((error) => {
+            console.log(error.response);
+            setUser(usersMessages.errorRequest);
+        });
+        console.log("USER: ")
+        console.log(user[0].username);
+    }
+
     return (
         <MainContainer>
         <Header />
         <Page>
             <Title>
-            <h2>{hashtag ? `# ${hashtag}`: "timeline"}</h2>
+            <h2>{hashtag ? `# ${hashtag}`: `${user[0].username}'s posts`}</h2>
             </Title>
             <Content>
             <Posts>
-                {hashtag ? <></> : <CreatePost setPosts={setPosts} image={userImage}/>}
                 <PostsPage posts={posts} />
             </Posts>
             <Hashtags hashtags={hashtags} />
