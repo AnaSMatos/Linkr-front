@@ -11,7 +11,6 @@ export default function PostsPage(props) {
         <>
           {posts.map((post, index) => {
             const { id, message, image, likes, username, postData, userId } = post;
-            console.log(userId)
             return (
               <Post
                 id={id}
