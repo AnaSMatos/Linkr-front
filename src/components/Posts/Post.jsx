@@ -17,8 +17,8 @@ export default function Post(props) {
       </LeftInfons>
       <RightInfons>
         <Icons>
-          <button onClick={()=> alert("clicou editar")}><i class="fa-solid fa-pen"></i></button>
-          <button onClick={()=> alert("clicou deletar")}><i class="fa-solid fa-trash-can"></i></button>
+          <button onClick={()=> alert("clicou editar")}><i className="fa-solid fa-pen"></i></button>
+          <button onClick={()=> alert("clicou deletar")}><i className="fa-solid fa-trash-can"></i></button>
         </Icons>
         <Link to={`/user/${userId}`}>
           <h3>{username}</h3>

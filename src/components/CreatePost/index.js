@@ -42,9 +42,14 @@ export default function CreatePost(props) {
             setLoading(false);
             setUrl('');
             setMessage('');
-            const promise = axios.get(`${process.env.REACT_APP_URL}/posts`, config);
-            promise
+            const getPromise = axios.get(`${process.env.REACT_APP_URL}/posts`, config);
+            getPromise
             .then(res => setPosts(res.data))
+            .catch(err => console.log(err))
+
+            const postPromise = axios.post(`${process.env.REACT_APP_URL}/hashtag`, body, config);
+            postPromise
+            .then(res => console.log(res.data))
             .catch(err => console.log(err))
         })
         promise.catch(err => {
