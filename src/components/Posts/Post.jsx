@@ -1,11 +1,12 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 import HashtagHook from "../../hooks/HashtagHook.js";
 
 import Like from "./../Like";
 
 export default function Post(props) {
-  const { id, message, image, username, postData, index } = props;
+  const { id, message, image, username, postData, index, userId } = props;
   const { postDescription, postImage, postTitle, postUrl } = postData;
 
   return (
@@ -19,7 +20,9 @@ export default function Post(props) {
           <button onClick={()=> alert("clicou editar")}><i class="fa-solid fa-pen"></i></button>
           <button onClick={()=> alert("clicou deletar")}><i class="fa-solid fa-trash-can"></i></button>
         </Icons>
-        <h3>{username}</h3>
+        <Link to={`/user/${userId}`}>
+          <h3>{username}</h3>
+        </Link>
         <p>
           <HashtagHook text={message} index={index} />
         </p>
