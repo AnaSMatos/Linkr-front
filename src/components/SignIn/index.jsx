@@ -16,7 +16,7 @@ export default function Register() {
     useContext(UserDataContexts);
   const { email, password } = infosLogin;
   const [disabled, setDisabled] = useState(false);
-  const {contextData,setContext}=getContext();
+  const { contextData, setContext } = getContext();
 
   const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ export default function Register() {
     setDisabled(true);
     postSignIn(e, infosLogin)
       .then((answer) => {
-        persistUser(contextData,setContext,answer.data);
+        persistUser(contextData, setContext, answer.data);
         setItem("user", { ...answer.data });
         navigate("/timeline");
         setUserInfos(answer.data);
