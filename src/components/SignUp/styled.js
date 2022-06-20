@@ -18,7 +18,7 @@ export const Header = styled.div`
   z-index: 1;
   top: 0;
   left: 0;
-  width: 375px;
+  width: 100%;
   height: 175px;
   background: #151515;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -74,6 +74,7 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0 20px;
 
   @media (min-width: 1024px) {
     margin-left: 60vw;
@@ -83,7 +84,8 @@ export const Form = styled.form`
 `;
 
 export const Input = styled.input`
-  width: 330px;
+  max-width: 330px;
+  width: 100%;
   height: 55px;
   padding: 15px;
   margin-bottom: 11px;
@@ -96,14 +98,24 @@ export const Input = styled.input`
   font-weight: 700;
   font-size: 22px;
   line-height: 33px;
-  color: #9f9f9f;
+  color: #333;
 
   &:disabled {
     pointer-events: none;
   }
 
+  &::placeholder {
+    color: #9f9f9f;
+  }
+
+  &::selection {
+    background: #333;
+    color: #ffffff;
+  }
+
   @media (min-width: 1024px) {
-    width: 429px;
+    width: 100%;
+    max-width: 429px;
     height: 65px;
     font-size: 27px;
     line-height: 40px;
@@ -111,7 +123,8 @@ export const Input = styled.input`
 `;
 
 export const Button = styled.button`
-  width: 330px;
+  max-width: 330px;
+  width: 100%;
   height: 55px;
 
   background: #1877f2;
@@ -123,7 +136,6 @@ export const Button = styled.button`
   font-size: 22px;
   line-height: 33px;
   color: #ffffff;
-  cursor: pointer;
 
   &:disabled {
     opacity: 0.7;
@@ -135,7 +147,8 @@ export const Button = styled.button`
   }
 
   @media (min-width: 1024px) {
-    width: 429px;
+    max-width: 429px;
+    width: 100%;
     height: 65px;
     font-size: 27px;
     line-height: 40px;
