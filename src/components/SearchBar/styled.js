@@ -8,7 +8,6 @@ export const Container = styled.div`
   max-width: 563px;
   width: 100%;
   position: relative;
-  background-color: red;
   z-index: 2;
   margin: ${(props) => (props.mobile ? "10px 10px" : "0")};
 `;
@@ -18,6 +17,7 @@ export const SearchBar = styled(DebounceInput)`
   height: 45px;
   border-radius: 8px;
   padding: 0 14px;
+  padding-right: 45px;
   font-size: 19px;
   font-family: "Lato", sans-serif;
   background-color: var(--color-white);
