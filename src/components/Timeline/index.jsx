@@ -55,25 +55,6 @@ export default function Timeline() {
       });
   }
   return (
-<<<<<<< HEAD
-      <MainContainer>
-        <Header />
-        <Page>
-          <Title>
-            <h2>timeline</h2>
-          </Title>
-          <Content>
-            <Posts>
-              <CreatePost setPosts={setPosts}/>
-              <PostsPage posts={posts} />
-            </Posts>
-            <Hashtags className="hashtags">
-              <h2>trending</h2>
-            </Hashtags>
-          </Content>
-        </Page>
-      </MainContainer>
-=======
     <MainContainer>
       <Header />
       <Page>
@@ -82,14 +63,13 @@ export default function Timeline() {
         </Title>
         <Content>
           <Posts>
-            {hashtag ? <></> : <CreatePost posts={posts} setPosts={setPosts} />}
+            {hashtag ? <></> : <CreatePost setPosts={setPosts} image={userImage}/>}
             <PostsPage posts={posts} />
           </Posts>
           <Hashtags hashtags={hashtags} />
         </Content>
       </Page>
     </MainContainer>
->>>>>>> 2185912300d974c4734470d9f7f84cc1ab6ff244
   );
 }
 
