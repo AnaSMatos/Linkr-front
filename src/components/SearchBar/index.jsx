@@ -13,6 +13,14 @@ export default function SearchBar(props) {
     inputRef.current.focus();
   };
 
+  const handleOnBlur = () => {
+    let id = setTimeout(() => {
+      setSearch({ ...search, show: false });
+    }, 300);
+
+    return () => clearTimeout(id);
+  };
+
   const handleSearch = async (e) => {
     const text = e.target.value;
     setSearch({ ...search, text });
@@ -40,12 +48,12 @@ export default function SearchBar(props) {
       return;
     }
 
-    setSearch({
-      ...search,
-      text,
-      result: [],
-      show: false,
-    });
+    // setSearch({
+    //   ...search,
+    //   text,
+    //   result: [],
+    //   show: false,
+    // });
   };
 
   return (
@@ -56,7 +64,7 @@ export default function SearchBar(props) {
         placeholder={props.placeholder}
         minLength={3}
         debounceTimeout={300}
-        onBlur={() => setSearch({ ...search, show: false })}
+        onBlur={handleOnBlur}
         value={search.text}
         onChange={(e) => handleSearch(e)}
       />
