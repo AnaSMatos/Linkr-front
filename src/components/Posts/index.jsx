@@ -10,7 +10,8 @@ export default function PostsPage(props) {
       ) : (
         <>
           {posts.map((post, index) => {
-            const { id, message, image, likes, username, postData } = post;
+            const { id, message, image, likes, username, postData, userId } = post;
+            console.log(userId)
             return (
               <Post
                 id={id}
@@ -21,6 +22,7 @@ export default function PostsPage(props) {
                 likes={likes}
                 username={username}
                 postData={postData}
+                userId={userId}
               />
             );
           })}
