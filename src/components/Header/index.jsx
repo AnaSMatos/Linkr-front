@@ -1,18 +1,33 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { getContext } from "../../hooks/UserContext";
+import { useWindowSize } from "./../../hooks/useWindowResize.js";
 
 import { getItem, deleteItem } from "./../../utils/localStorage.js";
 
 import Menu from "./../Menu";
 import MenuItem from "./../MenuItem";
+import SearchBar from "./../SearchBar";
 
 export default function Header() {
   const { userImage } = getContext().contextData;
+  const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
+  const size = useWindowSize();
   const userInfo = getItem("user");
+
+  useEffect(() => {
+    const mobile = size.width < 768;
+
+    if (mobile) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  }, [size]);
 
   const handleLogout = async () => {
     if (userInfo) {
@@ -42,19 +57,26 @@ export default function Header() {
   };
 
   return (
-    <HeaderContainer>
-      <h1>linkr</h1>
+    <>
+      <HeaderContainer>
+        <h1>linkr</h1>
 
-      <Menu src={userImage} alt="Fulaninho">
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
-      </Menu>
-    </HeaderContainer>
+        {!isMobile && <SearchBar placeholder="Search for people" />}
+
+        <Menu src={userImage} alt="Fulaninho">
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        </Menu>
+      </HeaderContainer>
+      {isMobile && (
+        <SearchBar mobile={isMobile} placeholder="Search for people" />
+      )}
+    </>
   );
 }
 
 const HeaderContainer = styled.header`
   position: fixed;
-  z-index: 1;
+  z-index: 10;
   top: 0;
   left: 0;
   width: 100%;
