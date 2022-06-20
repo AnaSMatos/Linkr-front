@@ -6,7 +6,9 @@ import { AiOutlineSearch } from "react-icons/ai";
 export const Container = styled.div`
   min-width: 350px;
   max-width: 563px;
+  width: 100%;
   position: relative;
+  background-color: red;
   z-index: 2;
   margin: ${(props) => (props.mobile ? "10px 10px" : "0")};
 `;
