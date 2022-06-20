@@ -63,7 +63,7 @@ export default function Timeline() {
         </Title>
         <Content>
           <Posts>
-            {hashtag ? <></> : <CreatePost posts={posts} setPosts={setPosts} />}
+            {hashtag ? <></> : <CreatePost setPosts={setPosts} image={userImage}/>}
             <PostsPage posts={posts} />
           </Posts>
           <Hashtags hashtags={hashtags} />

@@ -2,33 +2,38 @@ import styled from "styled-components";
 import { useState, useContext } from "react";
 import axios from "axios";
 
-export default function CreatePost(props) {
+import { getItem } from "./../../utils/localStorage.js";
 
-    const {posts, setPosts} = props
+export default function CreatePost(props) {
+    const userInfo = getItem("user");
+
+    const {setPosts, image} = props
     const [url, setUrl] = useState('');
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
 
-
+    const { userId, token } = userInfo;
 
     function handleSubmit(e) {
         e.preventDefault();
         setLoading(true);
+        let hashtags = []
         if (message === ""){
             setMessage(null);
         }else{
-            const hashtags = handleHashtags(message);
-            console.log(hashtags);
+            hashtags = handleHashtags(message);
         }
 
         const body = {
             message,
-            url
+            url,
+            userId,
+            hashtags
         }
 
         const config = {  
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem("token")}`
+                "Authorization": `Bearer ${token}`
             }
         }
 
@@ -59,7 +64,7 @@ export default function CreatePost(props) {
     return (
         <Create>
             <User>
-                <img src="" alt="ph" />
+                <img src={image} alt="ph" />
             </User>
             <Publish>
                 <h3>What are you going to share today?</h3>

@@ -15,6 +15,10 @@ export default function Post(props) {
         <Like id={id} />
       </LeftInfons>
       <RightInfons>
+        <Icons>
+          <button onClick={()=> alert("clicou editar")}><i class="fa-solid fa-pen"></i></button>
+          <button onClick={()=> alert("clicou deletar")}><i class="fa-solid fa-trash-can"></i></button>
+        </Icons>
         <h3>{username}</h3>
         <p>
           <HashtagHook text={message} index={index} />
@@ -38,7 +42,22 @@ export default function Post(props) {
   );
 }
 
+const Icons = styled.div`
+  display: flex;
+  position: absolute;
+  right: 5%;
+  button{
+    background: none;
+    border: none;
+  }
+  i{
+    font-size: 15px;
+    color: #FFFFFF;
+  }
+`
+
 const PostContainer = styled.article`
+  position: relative;
   width: 100%;
   height: 100%;
   max-width: var(--post-max-width);
