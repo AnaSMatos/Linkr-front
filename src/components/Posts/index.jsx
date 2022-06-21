@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Post from "./Post";
 
 export default function PostsPage(props) {
-  const { posts } = props;
+  const { posts, setPosts } = props;
   return (
     <Posts>
       {typeof posts === "string" ? (
@@ -22,6 +22,7 @@ export default function PostsPage(props) {
                 username={username}
                 postData={postData}
                 userId={userId}
+                setPosts={setPosts}
               />
             );
           })}

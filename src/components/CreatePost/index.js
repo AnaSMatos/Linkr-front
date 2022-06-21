@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 import { getItem } from "./../../utils/localStorage.js";
