@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import Loading from "../Layout/Loading.jsx"
 
 import Modal from 'react-modal';
 
@@ -59,11 +60,16 @@ export default function Post(props) {
           }
         }}
       >
-        <Title>Are you sure you want to delete this post?</Title>
-        <div>
-          <ButtonNo variant="secondary" onClick={()=> setModalIsOpen(false)}>No, go back</ButtonNo>
-          <ButtonYes variant="primary" onClick={deletePost}>Yes, delete it</ButtonYes>
-        </div>
+        {loading ? 
+        <><Title>Deletando...</Title><Loading/></> : 
+        <>
+          <Title>Are you sure you want to delete this post?</Title>
+          <div>
+            <ButtonNo variant="secondary" onClick={()=> setModalIsOpen(false)}>No, go back</ButtonNo>
+            <ButtonYes variant="primary" onClick={deletePost}>Yes, delete it</ButtonYes>
+          </div>
+        </>
+        }
       </Modal>
       <LeftInfons>
         <img src={image} alt="userPhoto" />
