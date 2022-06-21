@@ -2,12 +2,17 @@ import styled from "styled-components";
 import { useState, useContext } from "react";
 import axios from "axios";
 
-export default function CreatePost(props) {
+import { getItem } from "./../../utils/localStorage.js";
 
-    const {setPosts} = props
+export default function CreatePost(props) {
+    const userInfo = getItem("user");
+
+    const {setPosts, image} = props
     const [url, setUrl] = useState('');
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
+
+    const { userId, token } = userInfo;
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -22,12 +27,13 @@ export default function CreatePost(props) {
         const body = {
             message,
             url,
+            userId,
             hashtags
         }
 
         const config = {  
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem("token")}`
+                "Authorization": `Bearer ${token}`
             }
         }
 
@@ -36,9 +42,14 @@ export default function CreatePost(props) {
             setLoading(false);
             setUrl('');
             setMessage('');
-            const promise = axios.get(`${process.env.REACT_APP_URL}/posts`, config);
-            promise
+            const getPromise = axios.get(`${process.env.REACT_APP_URL}/posts`, config);
+            getPromise
             .then(res => setPosts(res.data))
+            .catch(err => console.log(err))
+
+            const postPromise = axios.post(`${process.env.REACT_APP_URL}/hashtag`, body, config);
+            postPromise
+            .then(res => console.log(res.data))
             .catch(err => console.log(err))
         })
         promise.catch(err => {
@@ -58,7 +69,7 @@ export default function CreatePost(props) {
     return (
         <Create>
             <User>
-                <img src="" alt="ph" />
+                <img src={image} alt="ph" />
             </User>
             <Publish>
                 <h3>What are you going to share today?</h3>
