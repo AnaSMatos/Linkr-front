@@ -13,7 +13,8 @@ import Hashtags from "../Hashtags/index.jsx";
 export default function Timeline() {
   const statusMessages = {
     loading: "Loading",
-    emptArray: "There are no posts yet",
+    noFollowings: "You don't follow anyone yet. Search for new friends!",
+    noPosts: "No posts found from your friends",
     errorRequest:
       "An error occured while trying to fetch the posts, please refresh the page",
   };
@@ -31,18 +32,23 @@ export default function Timeline() {
   }, [getContext().contextData]);
 
   function getPosts() {
+
     const promisse = axios.get(`${url}/posts${queryHashtag}`, config);
     promisse
       .then((response) => {
         const data = response.data;
-        if (data.length === 0) setPosts(statusMessages.emptArray);
-        else setPosts(data);
+        if (data == "-1")
+          setPosts(statusMessages.noFollowings);
+        else if (data.length === 0) 
+          setPosts(statusMessages.noPosts);
+        else 
+          setPosts(data);
       })
       .catch((error) => {
-        console.log(error.response);
         setPosts(statusMessages.errorRequest);
       });
   }
+
   function getHashtags() {
     const promisse = axios.get(`${url}/hashtag`, config);
     promisse
