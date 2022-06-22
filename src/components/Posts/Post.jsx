@@ -1,24 +1,84 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+import Loading from "../Layout/Loading.jsx"
+
+import Modal from 'react-modal';
 
 import HashtagHook from "../../hooks/HashtagHook.js";
+import { getContext } from "../../hooks/UserContext";
 
 import Like from "./../Like";
 
+Modal.setAppElement('.root');
+
 export default function Post(props) {
-  const { id, message, image, username, postData, index, userId } = props;
+  const { id, message, image, username, postData, index, userId, setPosts } = props;
   const { postDescription, postImage, postTitle, postUrl } = postData;
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  
+  const { url, config } = getContext().contextData;
+
+
+  function deletePost() {
+    setLoading(true);
+    const promise = axios.delete(`${url}/posts/${id}`, config);
+    promise
+    .then(res => {
+      setLoading(false);
+      setModalIsOpen(false);
+      const getPromise = axios.get(`${process.env.REACT_APP_URL}/posts`, config);
+      getPromise
+      .then(res => setPosts(res.data))
+      .catch(err => console.log(err))
+    })
+    .catch(err => {
+      setLoading(false);
+      setModalIsOpen(false);
+      alert('An error occured while trying to delete the post, please try again later');
+    })
+  }
 
   return (
     <PostContainer>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        style={{
+          content: {
+            margin: 'auto',
+            background: '#333333',
+            borderRadius: '50px',
+            width: '500px',
+            height: '250px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+          }
+        }}
+      >
+        {loading ? 
+        <><Title>Deletando...</Title><Loading/></> : 
+        <>
+          <Title>Are you sure you want to delete this post?</Title>
+          <div>
+            <ButtonNo variant="secondary" onClick={()=> setModalIsOpen(false)}>No, go back</ButtonNo>
+            <ButtonYes variant="primary" onClick={deletePost}>Yes, delete it</ButtonYes>
+          </div>
+        </>
+        }
+      </Modal>
       <LeftInfons>
         <img src={image} alt="userPhoto" />
         <Like id={id} />
       </LeftInfons>
       <RightInfons>
         <Icons>
-          <button onClick={()=> alert("clicou editar")}><i className="fa-solid fa-pen"></i></button>
-          <button onClick={()=> alert("clicou deletar")}><i className="fa-solid fa-trash-can"></i></button>
+          <button onClick={()=> alert(`clicou editar no post ${id}`)}><i className="fa-solid fa-pen"></i></button>
+          <button onClick={()=> setModalIsOpen(true)}><i className="fa-solid fa-trash-can"></i></button>
         </Icons>
         <Link to={`/user/${userId}`}>
           <h3>{username}</h3>
@@ -52,12 +112,47 @@ const Icons = styled.div`
   button{
     background: none;
     border: none;
+    cursor: pointer;
   }
   i{
     font-size: 15px;
     color: #FFFFFF;
   }
 `
+
+const Title = styled.h1`
+  font-family: 'Lato';
+  font-weight: 700;
+  font-size: 34px;
+  color: #FFFFFF;
+  margin-bottom: 35px;
+  text-align: center;
+`
+
+const ButtonYes = styled.button`
+  width: 134px;
+  height: 37px;
+  font-family: 'Lato';
+  font-weight: 700;
+  font-size: 18px;
+  background: #1877F2;
+  border-radius: 5px;
+  color: #FFFFFF;
+  cursor: pointer;
+`
+
+const ButtonNo = styled.button`
+  width: 134px;
+  height: 37px;
+  font-family: 'Lato';
+  font-weight: 700;
+  font-size: 18px;
+  background: #FFFFFF;
+  border-radius: 5px;
+  color: #1877F2;
+  margin-right: 15px;
+  cursor: pointer;
+  `
 
 const PostContainer = styled.article`
   position: relative;
@@ -104,6 +199,7 @@ const LeftInfons = styled.div`
   height: 100%;
   width: var(--left-infos-width);
 `;
+
 const RightInfons = styled.div`
   overflow: auto;
   width: 100%;
@@ -112,6 +208,7 @@ const RightInfons = styled.div`
   flex-direction: column;
   justify-content: space-between;
 `;
+
 const PostInfos = styled.article`
   border: 1px solid #4d4d4d;
   border-radius: 11px;

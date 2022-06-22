@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 import { getItem } from "./../../utils/localStorage.js";
@@ -7,7 +7,7 @@ import { getItem } from "./../../utils/localStorage.js";
 export default function CreatePost(props) {
     const userInfo = getItem("user");
 
-    const {setPosts, image} = props
+    const {setPosts, image,getPosts} = props
     const [url, setUrl] = useState('');
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
@@ -42,10 +42,7 @@ export default function CreatePost(props) {
             setLoading(false);
             setUrl('');
             setMessage('');
-            const getPromise = axios.get(`${process.env.REACT_APP_URL}/posts`, config);
-            getPromise
-            .then(res => setPosts(res.data))
-            .catch(err => console.log(err))
+            getPosts();
 
             const postPromise = axios.post(`${process.env.REACT_APP_URL}/hashtag`, body, config);
             postPromise
