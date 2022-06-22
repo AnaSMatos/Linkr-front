@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 import Header from "../Header";
 import PostsPage from "../Posts";
+import Follow from "../Follow";
 import MainContainer from "../Layout/MainContainer";
 import CreatePost from "../CreatePost";
 import { getContext } from "../../hooks/UserContext";
@@ -86,8 +87,9 @@ export default function UserPage() {
     <MainContainer>
       <Header />
       <Page>
-        <Title>
+        <Title hashtag={!!hashtag}>
           <h2>{hashtag ? `# ${hashtag}` : `${user[0].username}'s posts`}</h2>
+          {!hashtag && <Follow id={id} />}
         </Title>
         <Content>
           <Posts>
@@ -101,7 +103,8 @@ export default function UserPage() {
 }
 
 const Page = styled.section`
-  width: var(--page-width);
+  max-width: var(--page-width);
+  width: 100%;
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -109,6 +112,11 @@ const Page = styled.section`
 
 const Title = styled.div`
   padding: var(--tittle-padding);
+
+  display: flex;
+  align-items: center;
+  justify-content: ${(props) => (props.hashtag ? "start" : "space-between")};
+
   h2 {
     font-family: var(--font-family-h2);
     font-weight: var(--font-bold);
@@ -126,4 +134,6 @@ const Posts = styled.div`
 
 const Content = styled.div`
   display: flex;
+  justify-content: space-between;
+  width: 100%;
 `;
