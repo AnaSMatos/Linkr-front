@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
-import { ImLoop2 } from "react-icons/im";
+// import { ImLoop2 } from "react-icons/im";
 import useInterval from "use-interval";
 
 import Header from "../Header";
@@ -16,7 +16,8 @@ import NewPosts from "../Layout/NewPosts";
 export default function Timeline() {
   const statusMessages = {
     loading: "Loading",
-    emptArray: "There are no posts yet",
+    noFollowings: "You don't follow anyone yet. Search for new friends!",
+    noPosts: "No posts found from your friends",
     errorRequest:
       "An error occured while trying to fetch the posts, please refresh the page",
   };
@@ -42,12 +43,19 @@ export default function Timeline() {
   }, 15000);
 
   function getPosts() {
+
     const promisse = axios.get(`${url}/posts${queryHashtag}`, config);
     promisse
       .then((response) => {
         const data = response.data;
-        if (data.length === 0) setPosts(statusMessages.emptArray);
-        else setPosts(data);
+
+        if (data == "-1")
+          setPosts(statusMessages.noFollowings);
+        else if (data.length === 0) 
+          setPosts(statusMessages.noPosts);
+        else 
+          setPosts(data);
+      
         getNewPosts(true);
       })
       .catch((error) => {
@@ -68,7 +76,6 @@ export default function Timeline() {
         }
       })
       .catch((error) => {
-        console.log(error.response);
         setPosts(statusMessages.errorRequest);
       });
   }
