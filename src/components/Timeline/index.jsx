@@ -12,16 +12,11 @@ import CreatePost from "../CreatePost";
 import { getContext } from "../../hooks/UserContext";
 import Hashtags from "../Hashtags/index.jsx";
 import NewPosts from "../Layout/NewPosts";
+import statusMessages from "../Layout/statusMessages";
 
 export default function Timeline() {
-  const statusMessages = {
-    loading: "Loading",
-    noFollowings: "You don't follow anyone yet. Search for new friends!",
-    noPosts: "No posts found from your friends",
-    errorRequest:
-      "An error occured while trying to fetch the posts, please refresh the page",
-  };
   const [posts, setPosts] = useState(statusMessages.loading);
+  const [offset, setOffset] = useState(0);
   const [hashtags, setHashtags] = useState([]);
   const [newPosts, setNewPosts] = useState({
     currentPosts: 0,
@@ -29,33 +24,36 @@ export default function Timeline() {
   });
   const { url, config, userImage } = getContext().contextData;
   const { hashtag } = useParams();
-  const queryHashtag = hashtag ? `?hashtag=${hashtag}` : "";
+  const queryLimit = `?limit=10`;
+  const queryOffset = `&offset=${offset}`;
+  const queryHashtag = hashtag ? `&hashtag=${hashtag}` : "";
 
   useEffect(() => {
     if (config) {
       getPosts();
       getHashtags();
     }
-  }, [getContext().contextData]);
+  }, [getContext().contextData,offset]);
 
   useInterval(() => {
     getNewPosts(false);
   }, 15000);
 
   function getPosts() {
-
-    const promisse = axios.get(`${url}/posts${queryHashtag}`, config);
+    const promisse = axios.get(
+      `${url}/posts${queryLimit + queryOffset + queryHashtag }`,
+      config
+    );
     promisse
       .then((response) => {
         const data = response.data;
-
-        if (data == "-1")
-          setPosts(statusMessages.noFollowings);
-        else if (data.length === 0) 
-          setPosts(statusMessages.noPosts);
-        else 
-          setPosts(data);
-      
+        if(offset===0){
+          if (data == "-1") setPosts(statusMessages.noFollowings);
+          else if (data.length === 0) setPosts(statusMessages.noPosts);
+          else setPosts(data);
+        }else{
+          setPosts([...posts,...data]);
+        }
         getNewPosts(true);
       })
       .catch((error) => {
@@ -91,6 +89,11 @@ export default function Timeline() {
         setHashtags(statusMessages.errorRequest);
       });
   }
+
+  async function loadMore() {
+    setOffset(offset+10);
+  }
+
   return (
     <MainContainer>
       <Header />
@@ -103,13 +106,14 @@ export default function Timeline() {
             {hashtag ? (
               <></>
             ) : (
-              <CreatePost 
-              setPosts={setPosts} 
-              image={userImage} 
-              getPosts={getPosts}/>
+              <CreatePost
+                setPosts={setPosts}
+                image={userImage}
+                getPosts={getPosts}
+              />
             )}
-            <NewPosts getPosts={getPosts} newPosts = {newPosts}/>
-            <PostsPage posts={posts} />
+            <NewPosts getPosts={getPosts} newPosts={newPosts} />
+            <PostsPage posts={posts} setPosts={setPosts} loadMore={loadMore} totalPosts={newPosts.countPosts}/>
           </Posts>
           <Hashtags hashtags={hashtags} />
         </Content>
@@ -145,4 +149,3 @@ const Posts = styled.div`
 const Content = styled.div`
   display: flex;
 `;
-
