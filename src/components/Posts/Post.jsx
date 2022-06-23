@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Loading from "../Layout/Loading.jsx"
+import { getItem } from "./../../utils/localStorage.js";
 
 import Modal from 'react-modal';
 
@@ -14,13 +15,15 @@ import Like from "./../Like";
 Modal.setAppElement('.root');
 
 export default function Post(props) {
-  const { id, message, image, username, postData, index, userId, setPosts } = props;
+  const { id, message, image, username, postData, index, idUser, setPosts } = props;
   const { postDescription, postImage, postTitle, postUrl } = postData;
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editedMessage, setEditedMessage] = useState(message) 
   const inputRef = useRef(null);
+  const userInfo = getItem("user");
+  const { userId } = userInfo;
   
   const { url, config } = getContext().contextData;
 
@@ -50,6 +53,7 @@ export default function Post(props) {
       submitEdit()
     }
     else if (e.keyCode === 27){
+      setEditedMessage(message)
       setEditMode(false)
     }
   }
@@ -116,13 +120,15 @@ export default function Post(props) {
               <Like id={id} />
             </LeftInfons>
             <RightInfons>
-              <Icons>
+              {idUser === userId ?
+                <Icons>
                 <button onClick={() => setEditMode(!editMode)}>
                   <i className="fa-solid fa-pen"></i>
                 </button>
                 <button onClick={()=> setModalIsOpen(true)}><i className="fa-solid fa-trash-can"></i></button>
               </Icons>
-              <Link to={`/user/${userId}`}>
+              : <></>}
+              <Link to={`/user/${idUser}`}>
                 <h3>{username}</h3>
               </Link>
               {editMode ? 
@@ -135,7 +141,7 @@ export default function Post(props) {
                 ></textarea>
               :
                 <p>
-                  <HashtagHook text={message} index={index} />
+                  <HashtagHook text={editedMessage} index={index} />
                 </p>
               }
               <a href={postUrl} target="_blank" rel="noreferrer">

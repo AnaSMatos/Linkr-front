@@ -21,7 +21,7 @@ export default function PostsPage(props) {
                 likes={likes}
                 username={username}
                 postData={postData}
-                userId={userId}
+                idUser={userId}
                 setPosts={setPosts}
               />
             );
