@@ -75,6 +75,7 @@ export default function SearchBar(props) {
               <img src={user.image} alt={user.username} />
             )}
             <p>{user.username}</p>
+            {user.isFollowing && <span>• following</span>}
           </S.Link>
         ))}
       </S.SearchResult>
