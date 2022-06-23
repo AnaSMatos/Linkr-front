@@ -98,4 +98,11 @@ export const Link = styled(RRLink)`
     font-size: 19px;
     font-family: "Lato", sans-serif;
   }
+
+  span {
+    display: inline-block;
+    margin-left: 5px;
+    color: #515151;
+    opacity: 40%;
+  }
 `;
