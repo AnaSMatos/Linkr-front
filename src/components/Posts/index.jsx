@@ -11,12 +11,13 @@ export default function PostsPage(props) {
   //   console.log(posts.length<totalPosts);
   // },[posts.length,totalPosts]);
   return (
-    <InfiniteScroll style={{overflow:'hidden'}}
+    <InfiniteScroll
+      style={{ overflow: "hidden" }}
       dataLength={posts.length}
       next={loadMore}
-      hasMore={posts.length<totalPosts}
+      hasMore={posts.length < totalPosts}
       loader={<Loader />}
-      endMessage={<Loader text={"No More Posts"}/>}
+      endMessage={<Loader text={"No More Posts"} />}
     >
       <Posts>
         {typeof posts === "string" ? (
