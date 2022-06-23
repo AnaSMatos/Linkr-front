@@ -5,11 +5,6 @@ import Loader from "../Layout/Loader";
 
 export default function PostsPage(props) {
   const { posts, setPosts, loadMore, totalPosts } = props;
-  // useEffect(()=>{
-  //   console.log(`atual ${posts.length}`);
-  //   console.log(`total ${totalPosts}`);
-  //   console.log(posts.length<totalPosts);
-  // },[posts.length,totalPosts]);
   return (
     <InfiniteScroll
       style={{ overflow: "hidden" }}
@@ -37,7 +32,7 @@ export default function PostsPage(props) {
                   likes={likes}
                   username={username}
                   postData={postData}
-                  userId={userId}
+                  idUser={userId}
                   setPosts={setPosts}
                 />
               );
