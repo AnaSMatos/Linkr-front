@@ -213,6 +213,7 @@ const ButtonNo = styled.button`
   `
 
 const PostContainer = styled.article`
+  overflow-x: hidden;
   position: relative;
   width: 100%;
   height: 100%;
@@ -259,7 +260,6 @@ const LeftInfons = styled.div`
 `;
 
 const RightInfons = styled.div`
-  overflow: auto;
   width: 100%;
   min-height: 150px;
   display: flex;
@@ -282,7 +282,7 @@ const PostInfos = styled.article`
   border: 1px solid #4d4d4d;
   border-radius: 11px;
   width: 100%;
-  height: 100%;
+  height: var(--post-info-height);
   display: flex;
   justify-content: space-between;
   p {
@@ -295,11 +295,12 @@ const PostInfos = styled.article`
   }
   img {
     height: 100%;
-    width: 155px;
+    width: var(--post-image-width);
     border-radius: 0 11px 11px 0;
     margin: 0;
   }
   div {
+    overflow: auto;
     width: 100%;
     height: 100%;
     padding: var(--rigth-infos-padding);

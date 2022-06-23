@@ -34,10 +34,12 @@
 	--rigth-infos-margin: 11px;
 	--post-border-radius: 0px;
 	--post--margin--bottom:16px;
-	--post-max-width:611px;
+	--post-max-width:645px;
+	--post-info-height: 145px;
 	--post-perfil-image-size:40px;
 	--post-svg-margin:17px 0 5px 0;
 	--post-svg-size:19px;
+	--post-image-width: 130px;
 
 	--font-size-name:17px;
 	--font-size-big:15px;
