@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
-// import { ImLoop2 } from "react-icons/im";
 import useInterval from "use-interval";
 
 import Header from "../Header";

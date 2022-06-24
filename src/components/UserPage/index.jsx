@@ -2,23 +2,18 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
+import useInterval from "use-interval";
 
 import Header from "../Header";
 import PostsPage from "../Posts";
 import Follow from "../Follow";
 import MainContainer from "../Layout/MainContainer";
-import CreatePost from "../CreatePost";
 import { getContext } from "../../hooks/UserContext";
 import Hashtags from "../Hashtags/index.jsx";
+import statusMessages from "../Layout/statusMessages";
 
 export default function UserPage() {
   const { id } = useParams();
-  const statusMessages = {
-    loading: "Loading",
-    emptArray: "There are no posts yet",
-    errorRequest:
-      "An error occured while trying to fetch the posts, please refresh the page",
-  };
   const usersMessages = {
     loading: "Loading",
     emptArray: "There are no users with this id",
@@ -28,26 +23,49 @@ export default function UserPage() {
   const [posts, setPosts] = useState(statusMessages.loading);
   const [user, setUser] = useState(usersMessages.loading);
   const [hashtags, setHashtags] = useState([]);
-  const { url, config, userImage } = getContext().contextData;
+  const [offset, setOffset] = useState(0);
+  const [newPosts, setNewPosts] = useState({
+    currentPosts: 0,
+    countPosts: 0,
+  });
+  const queryLimit = `?limit=10`;
+  const queryOffset = `&offset=${offset}`;
+  const { url, config } = getContext().contextData;
   const { hashtag } = useParams();
-  const queryHashtag = hashtag ? `?hashtag=${hashtag}` : "";
 
   useEffect(() => {
     if (config) {
       getPosts();
       getHashtags();
       getUser();
+      getNewPosts();
     }
-  }, [getContext().contextData, id]);
+  }, [getContext().contextData, id,offset]);
+
+  function getNewPosts(update) {
+    const promisse = axios.get(`${url}/new-posts`);
+    promisse
+      .then((response) => {
+        const count = response.data;
+        if (update) {
+          setNewPosts({ countPosts: count, currentPosts: count });
+        } else {
+          setNewPosts({ ...newPosts, countPosts: count });
+        }
+      })
+      .catch((error) => {
+        setPosts(statusMessages.errorRequest);
+      });
+  }
 
   function getPosts() {
-    // console.log("Entrei em getPosts");
-    const promisse = axios.get(`${url}/posts/${id}`, config);
+    const promisse = axios.get(`${url}/posts/${id+ queryLimit + queryOffset }`, config);
     promisse
       .then((response) => {
         const data = response.data;
-        if (data.length === 0) setPosts(statusMessages.emptArray);
-        else setPosts(data);
+        if (data.length === 0 && offset===0) setPosts(statusMessages.emptArray);
+        else if(offset===0) setPosts(data);
+        else setPosts([...posts,...data]);
       })
       .catch((error) => {
         console.log(error.response);
@@ -67,7 +85,6 @@ export default function UserPage() {
   }
 
   function getUser() {
-    // console.log("Entrei em getUser");
     const promisse = axios.get(`${url}/user/${id}`, config);
     promisse
       .then((response) => {
@@ -79,8 +96,10 @@ export default function UserPage() {
         console.log(error.response);
         setUser(usersMessages.errorRequest);
       });
-    // console.log("USER: ");
-    // console.log(user[0].username);
+  }
+
+  async function loadMore() {
+    setOffset(offset+10);
   }
 
   return (
@@ -93,7 +112,7 @@ export default function UserPage() {
         </Title>
         <Content>
           <Posts>
-            <PostsPage posts={posts} />
+            <PostsPage posts={posts} setPosts={setPosts} loadMore={loadMore} totalPosts={newPosts.countPosts} />
           </Posts>
           <Hashtags hashtags={hashtags} />
         </Content>
