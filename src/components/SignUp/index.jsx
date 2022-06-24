@@ -66,6 +66,7 @@ export default function SignUp() {
           disabled={disabled ? "disabled" : ""}
           type="text"
           value={username}
+          minLength={3}
           placeholder="username"
           required
           onChange={(e) => setSignUp({ ...signUp, username: e.target.value })}
