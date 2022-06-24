@@ -23,7 +23,7 @@ export default function SearchBar(props) {
 
   const handleSearch = async (e) => {
     const text = e.target.value;
-    setSearch({ ...search, text });
+    setSearch({ ...search, text: search.text });
 
     if (text.length > 2) {
       try {
@@ -40,7 +40,7 @@ export default function SearchBar(props) {
         setSearch({
           ...search,
           text,
-          result: [{ id: -1, image: "", username: "Não encontrado" }],
+          result: [{ id: null, image: "", username: "Não encontrado" }],
           show: true,
         });
       }
@@ -48,12 +48,7 @@ export default function SearchBar(props) {
       return;
     }
 
-    // setSearch({
-    //   ...search,
-    //   text,
-    //   result: [],
-    //   show: false,
-    // });
+    setSearch({ ...search, show: false });
   };
 
   return (
@@ -70,7 +65,7 @@ export default function SearchBar(props) {
       />
       <S.SearchResult show={search.result.length > 0 && search.show}>
         {search.result.map((user) => (
-          <S.Link to={`/user/${user.id}`} key={user.id}>
+          <S.Link to={user.id === null ? "" : `/user/${user.id}`} key={user.id}>
             {user.username !== "Não encontrado" && (
               <img src={user.image} alt={user.username} />
             )}
