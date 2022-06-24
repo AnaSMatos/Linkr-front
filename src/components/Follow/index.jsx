@@ -12,6 +12,8 @@ export default function Follow(props) {
   });
 
   useEffect(() => {
+    setStatus({ ...status, show: false });
+
     async function checkFollowing() {
       setStatus({ ...status, loading: true });
 
@@ -22,9 +24,13 @@ export default function Follow(props) {
 
         if (following && !myself) {
           setStatus({ following: true, loading: false, show: true });
+          return;
         } else if (!following && !myself) {
           setStatus({ following: false, loading: false, show: true });
+          return;
         }
+
+        setStatus({ following: false, loading: false, show: false });
       } catch (e) {
         console.log(e);
       }

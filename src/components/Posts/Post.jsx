@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Loading from "../Layout/Loading.jsx";
 import { getItem } from "./../../utils/localStorage.js";
-import {TiMessages} from "react-icons/ti";
+import { TiMessages } from "react-icons/ti";
 
 import Modal from "react-modal";
 
@@ -13,6 +13,7 @@ import { getContext } from "../../hooks/UserContext";
 import Comments from "../Comments";
 
 import Like from "./../Like";
+import Repost from "./../Repost";
 
 Modal.setAppElement(".root");
 
@@ -31,11 +32,11 @@ export default function Post(props) {
   const { userId } = userInfo;
 
   const { url, config } = getContext().contextData;
-  useEffect(()=>{
+  useEffect(() => {
     getCount();
-  },[]);
-  
-  function getCount(){
+  }, []);
+
+  function getCount() {
     const promisse = axios.get(`${url}/comments/count/${id}`, config);
     promisse
       .then((response) => {
@@ -62,7 +63,7 @@ export default function Post(props) {
         setLoading(false);
         setModalIsOpen(false);
         alert(
-          "An error occured while trying to delete the post, please try again later"
+          "An error occured while trying to delete the post, please try again later",
         );
       });
   }
@@ -94,7 +95,7 @@ export default function Post(props) {
       })
       .catch((err) => {
         alert(
-          "An error occured while trying to update the post, please try again later"
+          "An error occured while trying to update the post, please try again later",
         );
         setLoading(false);
       });
@@ -107,7 +108,12 @@ export default function Post(props) {
   }, [editMode]);
 
   return (
-    <>
+    <Container>
+      {/* Se for um repost esse é o layout */}
+      {/* <HeaderRepost>
+        <i className="fa-solid fa-retweet"></i>
+        <p>Re-posted by you</p>
+      </HeaderRepost> */}
       <PostContainer>
         <Modal
           isOpen={modalIsOpen}
@@ -151,9 +157,16 @@ export default function Post(props) {
         <LeftInfons>
           <img src={image} alt="userPhoto" />
           <Like id={id} />
-          <TiMessages className="messageIcon"
-          onClick={()=>{setViewMessages(!viewMessages)}}/>
-          <p><small>{count} comments</small></p>
+          <Repost postId={id} userId={userId} />
+          <TiMessages
+            className="messageIcon"
+            onClick={() => {
+              setViewMessages(!viewMessages);
+            }}
+          />
+          <p>
+            <small>{count} comments</small>
+          </p>
         </LeftInfons>
         <RightInfons>
           {idUser === userId ? (
@@ -200,12 +213,41 @@ export default function Post(props) {
           </a>
         </RightInfons>
       </PostContainer>
-      <CommentContainer visible = {viewMessages}>
-        <Comments img = {image} id={id} getCount={getCount}/>
+      <CommentContainer visible={viewMessages}>
+        <Comments img={image} id={id} getCount={getCount} />
       </CommentContainer>
-    </>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  width: 100%;
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+const HeaderRepost = styled.div`
+  background: #1e1e1e;
+  position: relative;
+  width: 100%;
+  max-width: 611px;
+  height: 60px;
+  top: 23px;
+  z-index: 0;
+  border-radius: 16px;
+  display: flex;
+  i {
+    color: #ffffff;
+    padding: 3px 2px 3px 15px;
+  }
+  p {
+    color: #ffffff;
+    font-size: 11px;
+    padding: 6px 0px;
+  }
+`;
 
 const Icons = styled.div`
   display: flex;
@@ -365,5 +407,5 @@ const PostInfos = styled.article`
 const CommentContainer = styled.div`
   position: relative;
   min-height: 215px;
-  display: ${props => props.visible ? "initial" : "none"};
+  display: ${(props) => (props.visible ? "initial" : "none")};
 `;

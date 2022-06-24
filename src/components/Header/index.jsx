@@ -71,11 +71,25 @@ export default function Header() {
         </Menu>
       </HeaderContainer>
       {isMobile && (
-        <SearchBar mobile={isMobile} placeholder="Search for people" />
+        <Container>
+          <SearchBar
+            mobile={isMobile}
+            placeholder="Search for people and friends"
+          />
+        </Container>
       )}
     </>
   );
 }
+
+const Container = styled.div`
+  margin: 0px auto;
+  width: 70%;
+
+  @media (max-width: 645px) {
+    width: 95%;
+  }
+`;
 
 const HeaderContainer = styled.header`
   position: fixed;
