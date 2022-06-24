@@ -8,9 +8,9 @@ export default function PostsPage(props) {
   return (
     <InfiniteScroll
       style={{ overflow: "hidden" }}
-      dataLength={posts.length}
+      dataLength={posts?.length}
       next={loadMore}
-      hasMore={posts.length < totalPosts}
+      hasMore={posts?.length < totalPosts}
       loader={<Loader />}
       endMessage={<Loader text={"No More Posts"} />}
     >
@@ -19,7 +19,7 @@ export default function PostsPage(props) {
           <p>{posts}</p>
         ) : (
           <>
-            {posts.map((post, index) => {
+            {posts?.map((post, index) => {
               const { id, message, image, likes, username, postData, userId } =
                 post;
               return (
