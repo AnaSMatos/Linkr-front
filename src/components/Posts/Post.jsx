@@ -109,11 +109,6 @@ export default function Post(props) {
 
   return (
     <Container>
-      {/* Se for um repost esse é o layout */}
-      {/* <HeaderRepost>
-        <i className="fa-solid fa-retweet"></i>
-        <p>Re-posted by you</p>
-      </HeaderRepost> */}
       <PostContainer>
         <Modal
           isOpen={modalIsOpen}
@@ -130,6 +125,7 @@ export default function Post(props) {
               alignItems: "center",
               flexDirection: "column",
             },
+            overlay: {zIndex: 1000}
           }}
         >
           {loading ? (
@@ -157,7 +153,6 @@ export default function Post(props) {
         <LeftInfons>
           <img src={image} alt="userPhoto" />
           <Like id={id} />
-          <Repost postId={id} userId={userId} />
           <TiMessages
             className="messageIcon"
             onClick={() => {
@@ -167,6 +162,7 @@ export default function Post(props) {
           <p>
             <small>{count} comments</small>
           </p>
+          <Repost postId={id} userId={userId} />
         </LeftInfons>
         <RightInfons>
           {idUser === userId ? (

@@ -109,7 +109,8 @@ const Container = styled.div`
   margin-top: 3px;
   p {
     color: var(--color-white);
-    font-size: 11px;
+    font-size: 10px;
+    font-weight: bold;
   }
 `;
 
