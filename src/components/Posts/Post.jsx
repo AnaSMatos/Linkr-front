@@ -11,6 +11,7 @@ import HashtagHook from "../../hooks/HashtagHook.js";
 import { getContext } from "../../hooks/UserContext";
 
 import Like from "./../Like";
+import Repost from "./../Repost";
 
 Modal.setAppElement('.root');
 
@@ -35,10 +36,6 @@ export default function Post(props) {
     .then(res => {
       setLoading(false);
       setModalIsOpen(false);
-      const getPromise = axios.get(`${url}/posts`, config);
-      getPromise
-      .then(res => setPosts(res.data))
-      .catch(err => console.log(err))
     })
     .catch(err => {
       setLoading(false);
@@ -86,7 +83,14 @@ export default function Post(props) {
   }, [editMode]);
 
   return (
-    <PostContainer>
+    <Container>
+      {/* Se for um repost esse é o layout */}
+      {/* <HeaderRepost>
+        <i className="fa-solid fa-retweet"></i>
+        <p>Re-posted by you</p>
+      </HeaderRepost> */}
+      <PostContainer>
+
           <Modal
             isOpen={modalIsOpen}
             onRequestClose={() => setModalIsOpen(false)}
@@ -114,54 +118,85 @@ export default function Post(props) {
               </div>
             </>
             }
-          </Modal>
-            <LeftInfons>
-              <img src={image} alt="userPhoto" />
-              <Like id={id} />
-            </LeftInfons>
-            <RightInfons>
-              {idUser === userId ?
-                <Icons>
+          </Modal>            
+          <LeftInfons>
+            <img src={image} alt="userPhoto" />
+            <Like id={id} />
+            <Repost postId={id} userId={userId}/>
+          </LeftInfons>
+          <RightInfons>
+            {idUser === userId ?
+              <Icons>
                 <button onClick={() => setEditMode(!editMode)}>
                   <i className="fa-solid fa-pen"></i>
                 </button>
                 <button onClick={()=> setModalIsOpen(true)}><i className="fa-solid fa-trash-can"></i></button>
               </Icons>
-              : <></>}
-              <Link to={`/user/${idUser}`}>
-                <h3>{username}</h3>
-              </Link>
-              {editMode ? 
-                <textarea 
-                  value={editedMessage}
-                  onChange={(e) => setEditedMessage(e.target.value)}
-                  ref={inputRef}
-                  onKeyDown={editPost}
-                  disabled={loading}
-                ></textarea>
-              :
-                <p>
-                  <HashtagHook text={editedMessage} index={index} />
-                </p>
-              }
-              <a href={postUrl} target="_blank" rel="noreferrer">
-                <PostInfos>
-                  <div>
-                    <p>{postTitle}</p>
-                    <p>
-                      <small>{postDescription}</small>
-                    </p>
-                    <p>
-                      <small>{postUrl}</small>
-                    </p>
-                  </div>
-                  <img src={postImage} alt="postImage" />
-                </PostInfos>
-              </a>
-            </RightInfons>
-    </PostContainer>
+            : <></>}
+            <Link to={`/user/${idUser}`}>
+              <h3>{username}</h3>
+            </Link>
+            {editMode ? 
+              <textarea 
+                value={editedMessage}
+                onChange={(e) => setEditedMessage(e.target.value)}
+                ref={inputRef}
+                onKeyDown={editPost}
+                disabled={loading}
+              ></textarea>
+            :
+              <p>
+                <HashtagHook text={editedMessage} index={index} />
+              </p>
+            }
+            <a href={postUrl} target="_blank" rel="noreferrer">
+              <PostInfos>
+                <div>
+                  <p>{postTitle}</p>
+                  <p>
+                    <small>{postDescription}</small>
+                  </p>
+                  <p>
+                    <small>{postUrl}</small>
+                  </p>
+                </div>
+                <img src={postImage} alt="postImage" />
+              </PostInfos>
+            </a>
+          </RightInfons>
+      </PostContainer>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  width: 100%;
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`
+
+const HeaderRepost = styled.div`
+  background: #1E1E1E;
+  position: relative;
+  width: 100%;
+  max-width: 611px;
+  height: 60px;
+  top: 23px;
+  z-index: 0;
+  border-radius: 16px;
+  display: flex;
+  i{
+    color: #FFFFFF;
+    padding: 3px 2px 3px 15px;
+  }
+  p{
+    color: #FFFFFF;
+    font-size: 11px;
+    padding: 6px 0px;
+  }
+`
 
 const Icons = styled.div`
   display: flex;
@@ -213,7 +248,11 @@ const ButtonNo = styled.button`
   `
 
 const PostContainer = styled.article`
+<<<<<<< HEAD
+  z-index: 1;
+=======
   overflow-x: hidden;
+>>>>>>> 4cb3ddbc680b5b9a1e9fbd44229a341f99adffbe
   position: relative;
   width: 100%;
   height: 100%;
