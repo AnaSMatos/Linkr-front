@@ -90,7 +90,7 @@ function CommentContainer(props) {
       <div className="text">
         <p>
           <strong>{name}</strong>
-          <small>{typeOfUser ? `•${typeOfUser}` : ""}</small>
+          <small>{typeOfUser ? ` • ${typeOfUser}` : ""}</small>
         </p>
         <p>{message}</p>
       </div>
