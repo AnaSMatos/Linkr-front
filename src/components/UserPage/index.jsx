@@ -34,13 +34,15 @@ export default function UserPage() {
   const { hashtag } = useParams();
 
   useEffect(() => {
-    if (config) {
-      getPosts();
-      getHashtags();
-      getUser();
-      getNewPosts();
-    }
-  }, [getContext().contextData, id,offset]);
+    (async () => {
+      if (config) {
+        await getUser();
+        await getPosts();
+        await getHashtags();
+        await getNewPosts();
+      }
+    })();
+  }, [id, getContext().contextData, offset]);
 
   function getNewPosts(update) {
     const promisse = axios.get(`${url}/new-posts`);
@@ -59,16 +61,19 @@ export default function UserPage() {
   }
 
   function getPosts() {
-    const promisse = axios.get(`${url}/posts/${id+ queryLimit + queryOffset }`, config);
+    const promisse = axios.get(
+      `${url}/posts/${id + queryLimit + queryOffset}`,
+      config,
+    );
     promisse
       .then((response) => {
         const data = response.data;
-        if (data.length === 0 && offset===0) setPosts(statusMessages.emptArray);
-        else if(offset===0) setPosts(data);
-        else setPosts([...posts,...data]);
+        if (data.length === 0 && offset === 0)
+          setPosts(statusMessages.emptArray);
+        else if (offset === 0) setPosts(data);
+        else setPosts([...posts, ...data]);
       })
       .catch((error) => {
-        console.log(error.response);
         setPosts(statusMessages.errorRequest);
       });
   }
@@ -99,7 +104,7 @@ export default function UserPage() {
   }
 
   async function loadMore() {
-    setOffset(offset+10);
+    setOffset(offset + 10);
   }
 
   return (
@@ -108,11 +113,17 @@ export default function UserPage() {
       <Page>
         <Title hashtag={!!hashtag}>
           <h2>{hashtag ? `# ${hashtag}` : `${user[0].username}'s posts`}</h2>
-          {!hashtag && <Follow id={id} />}
+          {!hashtag && user[0].username !== undefined && <Follow id={id} />}
         </Title>
+
         <Content>
           <Posts>
-            <PostsPage posts={posts} setPosts={setPosts} loadMore={loadMore} totalPosts={newPosts.countPosts} />
+            <PostsPage
+              posts={posts}
+              setPosts={setPosts}
+              loadMore={loadMore}
+              totalPosts={newPosts.countPosts}
+            />
           </Posts>
           <Hashtags hashtags={hashtags} />
         </Content>

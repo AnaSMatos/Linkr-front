@@ -47,10 +47,11 @@ export default function Comments(props) {
         <>
           {comments.map((comment) => {
             const { id, message, user } = comment;
-            const { image, typeOfUser, username } = user;
+            const { id: userId, image, typeOfUser, username } = user;
             return (
               <CommentContainer
                 key={id + message + username}
+                userId={userId}
                 img={image}
                 typeOfUser={typeOfUser}
                 name={username}
@@ -83,7 +84,7 @@ export default function Comments(props) {
 }
 
 function CommentContainer(props) {
-  const { img, name, message, typeOfUser } = props;
+  const { userId, img, name, message, typeOfUser } = props;
   return (
     <Comment>
       <img src={img} alt="commented img" />
@@ -175,6 +176,7 @@ const Comment = styled.article`
     p {
       font-size: 16px;
       color: #acacac;
+      margin-top: 3px;
     }
     strong {
       font-weight: var(--font-bold);

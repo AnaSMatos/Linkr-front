@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Link } from "../SearchBar/styled";
+import Swal from "sweetalert2";
 
 import { getContext } from "../../hooks/UserContext";
 import { useWindowSize } from "./../../hooks/useWindowResize.js";
@@ -19,6 +20,40 @@ export default function Header() {
   const navigate = useNavigate();
   const size = useWindowSize();
   const userInfo = getItem("user");
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        };
+        await axios.get(`${process.env.REACT_APP_URL}/posts`, config);
+      } catch (error) {
+        const messages = [
+          "You must be logged in to do this.",
+          "Invalid token.",
+          "Session not found",
+        ];
+        const messageReceived = error.response.data.message;
+
+        await Swal.fire({
+          title: "Oops...",
+          text: messages.includes(messageReceived)
+            ? messageReceived
+            : "Something went wrong.",
+          icon: "error",
+          confirmButtonText: "Ir para o login",
+        });
+
+        if (messages.includes(messageReceived)) {
+          deleteItem("user");
+          navigate("/");
+        }
+      }
+    })();
+  }, [userInfo]);
 
   useEffect(() => {
     const mobile = size.width < 768;
@@ -45,7 +80,7 @@ export default function Header() {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         deleteItem("user");
@@ -61,7 +96,12 @@ export default function Header() {
     <>
       <HeaderContainer>
         <h1>
-          <Link style={{color:"white"}} to={"/"}>linkr</Link>
+          <Link
+            style={{ color: "#fff", backgroundColor: "transparent" }}
+            to={"/timeline"}
+          >
+            linkr
+          </Link>
         </h1>
 
         {!isMobile && <SearchBar placeholder="Search for people" />}
@@ -85,6 +125,10 @@ export default function Header() {
 const Container = styled.div`
   margin: 0px auto;
   width: 70%;
+
+  a {
+    color: white;
+  }
 
   @media (max-width: 645px) {
     width: 95%;
