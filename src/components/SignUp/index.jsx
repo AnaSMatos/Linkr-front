@@ -1,12 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import RenderButton from "./../Layout/RenderButton.jsx";
 import * as S from "./styled.js";
 
 import { UserDataContexts } from "../../hooks/AuthContext.js";
 
-import { getItem } from "./../../utils/localStorage.js";
+import { getItem, deleteItem } from "./../../utils/localStorage.js";
 
 export default function SignUp() {
   const { signUp, setSignUp, postSignUp } = useContext(UserDataContexts);
@@ -16,8 +17,33 @@ export default function SignUp() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (getItem("user")) navigate("/timeline");
-  }, [navigate]);
+    const token = getItem("user")?.token;
+
+    if (token) {
+      (async () => {
+        try {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          };
+          await axios.get(`${process.env.REACT_APP_URL}/posts`, config);
+          navigate("/timeline");
+        } catch (error) {
+          const messages = [
+            "You must be logged in to do this.",
+            "Invalid token.",
+            "Session not found",
+          ];
+          const messageReceived = error.response.data.message;
+
+          if (messages.includes(messageReceived)) {
+            deleteItem("user");
+          }
+        }
+      })();
+    }
+  }, []);
 
   function OnSubmit(e) {
     setDisabled(true);

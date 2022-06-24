@@ -1,12 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import RenderButton from "./../Layout/RenderButton.jsx";
 import * as S from "./styled.js";
 
 import { UserDataContexts } from "../../hooks/AuthContext.js";
 
-import { setItem, getItem } from "./../../utils/localStorage.js";
+import { setItem, getItem, deleteItem } from "./../../utils/localStorage.js";
 
 import { getContext } from "../../hooks/UserContext.js";
 import persistUser from "../../hooks/persistUser.js";
@@ -21,7 +22,32 @@ export default function Register() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (getItem("user")) navigate("/timeline");
+    const token = getItem("user")?.token;
+
+    if (token) {
+      (async () => {
+        try {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          };
+          await axios.get(`${process.env.REACT_APP_URL}/posts`, config);
+          navigate("/timeline");
+        } catch (error) {
+          const messages = [
+            "You must be logged in to do this.",
+            "Invalid token.",
+            "Session not found",
+          ];
+          const messageReceived = error.response.data.message;
+
+          if (messages.includes(messageReceived)) {
+            deleteItem("user");
+          }
+        }
+      })();
+    }
   }, [navigate]);
 
   function OnSubmit(e) {

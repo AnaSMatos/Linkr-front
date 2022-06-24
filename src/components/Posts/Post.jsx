@@ -299,7 +299,7 @@ const ButtonNo = styled.button`
 `;
 
 const PostContainer = styled.article`
-  z-index:2;
+  z-index: 1;
   overflow-x: hidden;
   position: relative;
   width: 100%;
@@ -335,7 +335,7 @@ const PostContainer = styled.article`
     height: var(--post-perfil-image-size);
     border-radius: 100%;
   }
-  .messageIcon{
+  .messageIcon {
     font-size: 20px;
     cursor: pointer;
     margin-top: 15px;
@@ -406,6 +406,7 @@ const PostInfos = styled.article`
 
 const CommentContainer = styled.div`
   position: relative;
+  z-index: 0;
   min-height: 215px;
   display: ${(props) => (props.visible ? "initial" : "none")};
 `;
