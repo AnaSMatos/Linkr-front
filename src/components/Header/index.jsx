@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Link } from "../SearchBar/styled";
 
 import { getContext } from "../../hooks/UserContext";
 import { useWindowSize } from "./../../hooks/useWindowResize.js";
@@ -44,7 +45,7 @@ export default function Header() {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
 
         deleteItem("user");
@@ -59,7 +60,9 @@ export default function Header() {
   return (
     <>
       <HeaderContainer>
-        <h1>linkr</h1>
+        <h1>
+          <Link style={{color:"white"}} to={"/"}>linkr</Link>
+        </h1>
 
         {!isMobile && <SearchBar placeholder="Search for people" />}
 
